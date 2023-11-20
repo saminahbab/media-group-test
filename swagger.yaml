@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+  title: Spotify Song Service API
+  description: Test Server for UMG
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /songs/{isrc}:
+    put:
+      summary: Save a song
+      parameters:
+        - name: isrc
+          in: path
+          description: The ISRC of the song
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+      responses:
+        '200':
+          description: Successfully saved the song
+        '404':
+          description: Song not found
+        '500':
+          description: Internal Server Error
+  /songs/{isrc}:
+    get:
+      summary: Get a song by ISRC
+      parameters:
+        - name: isrc
+          in: path
+          description: The ISRC of the song
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved the song
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Song'
+        '404':
+          description: Song not found
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    Artist:
+      type: object
+      properties:
+        artist_id:
+          type: string
+        name:
+          type: string
+      required:
+        - artist_id
+        - name
+    Song:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        album_uri:
+          type: string
+        artist:
+          type: array
+          items:
+            $ref: '#/components/schemas/Artist'
+      required:
+        - id
+        - name
+        - album_uri
+        - artist
